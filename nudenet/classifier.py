@@ -36,11 +36,10 @@ class Classifier:
             print(f" Downloading the checkpoint {url} to {model_path}")
             with open(model_path, 'wb') as model_file:
                 with get(url, stream=True) as response:
-                    total = response.json()["content_length"]
+                    # total = response.headers["content_length"]
                     for i, packet in enumerate(response.iter_content(8 * 1024)):
                         model_file.write(packet)
-                        print("\x1b[2k",
-                              f"{(i * 8 * 1024) / total:%} Complete", end='\r')
+                        # print("\x1b[2k", f"{(i * 8 * 1024) / total:%} Complete", end='\r')
 
         self.nsfw_model = InferenceSession(model_path)
 
