@@ -25,7 +25,7 @@ class Classifier:
         """
         model = Classifier()
         """
-        url = "https://huggingface.co/gqfwqgw/NudeNet_classifier_model/raw/main/classifier_model.onnx"
+        url = "https://huggingface.co/gqfwqgw/NudeNet_classifier_model/resolve/main/classifier_model.onnx"
         model_folder = join(expanduser("~"), ".NudeNet/")
         if not exists(model_folder):
             mkdir(model_folder)
@@ -34,12 +34,15 @@ class Classifier:
 
         if not exists(model_path):
             print(f" Downloading the checkpoint {url} to {model_path}")
-            with open(model_path, 'wb') as model_file:
-                with get(url) as response:
-                    # total = response.headers["content_length"]
-                    for i, packet in enumerate(response.iter_content(8 * 1024)):
-                        model_file.write(packet)
-                        # print("\x1b[2k", f"{(i * 8 * 1024) / total:%} Complete", end='\r')
+            with get(url, stream=True) as r:
+                print(r.status_code)
+                with open(model_path, 'wb') as model_file:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        # If you have chunk encoded response uncomment if
+                        # and set chunk_size parameter to None.
+                        # if chunk:
+                        model_file.write(chunk)
+                    # print("\x1b[2k", f"{(i * 8 * 1024) / total:%} Complete", end='\r')
 
         self.nsfw_model = InferenceSession(model_path)
 
