@@ -66,6 +66,9 @@ python fastDeploy-file_client.py --dir PATH_TO_FOLDER --ext jpg
 **Installation**:
 ```bash
 pip install --upgrade nudenet
+
+pip install git+https://github.com/Sterrenhemel/NudeNet
+
 ```
 
 **Classifier Usage**:
