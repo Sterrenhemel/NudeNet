@@ -1,10 +1,13 @@
 import os
+from os import mkdir
+from os.path import expanduser, join, basename, exists
 import cv2
 import pydload
 import logging
 import numpy as np
 import onnxruntime
 from progressbar import progressbar
+from requests import get
 
 from .detector_utils import preprocess_image
 from .video_utils import get_interest_frames_from_video
@@ -48,11 +51,19 @@ class Detector:
 
         if not os.path.exists(checkpoint_path):
             print("Downloading the checkpoint to", checkpoint_path)
-            pydload.dload(checkpoint_url, save_to_path=checkpoint_path, max_time=None)
+            # pydload.dload(checkpoint_url, save_to_path=checkpoint_path, max_time=None)
+            with get(checkpoint_url, stream=True) as r:
+                with open(checkpoint_path, 'wb') as model_file:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        model_file.write(chunk)
 
         if not os.path.exists(classes_path):
             print("Downloading the classes list to", classes_path)
-            pydload.dload(classes_url, save_to_path=classes_path, max_time=None)
+            # pydload.dload(classes_url, save_to_path=classes_path, max_time=None)
+            with get(classes_url, stream=True) as r:
+                with open(classes_path, 'wb') as model_file:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        model_file.write(chunk)
 
         self.detection_model = onnxruntime.InferenceSession(checkpoint_path)
 
