@@ -19,12 +19,12 @@ def dummy(x):
 
 FILE_URLS = {
     "default": {
-        "checkpoint": "https://github.com/notAI-tech/NudeNet/releases/download/v0/detector_v2_default_checkpoint.onnx",
-        "classes": "https://github.com/notAI-tech/NudeNet/releases/download/v0/detector_v2_default_classes",
+        "checkpoint": "https://huggingface.co/gqfwqgw/NudeNet_classifier_model/resolve/main/detector_v2_default_checkpoint.onnx",
+        "classes": "https://huggingface.co/gqfwqgw/NudeNet_classifier_model/raw/main/detector_v2_default_classes",
     },
     "base": {
-        "checkpoint": "https://github.com/notAI-tech/NudeNet/releases/download/v0/detector_v2_base_checkpoint.onnx",
-        "classes": "https://github.com/notAI-tech/NudeNet/releases/download/v0/detector_v2_base_classes",
+        "checkpoint": "https://huggingface.co/gqfwqgw/NudeNet_classifier_model/resolve/main/detector_v2_base_checkpoint.onnx",
+        "classes": "https://huggingface.co/gqfwqgw/NudeNet_classifier_model/raw/main/detector_v2_base_classes",
     },
 }
 
