@@ -4,8 +4,11 @@ import cv2
 import pydload
 import logging
 import numpy as np
+import requests
+from io import BytesIO
 
 from PIL import Image as pil_image
+from PIL.Image import Image
 
 if pil_image is not None:
     _PIL_INTERPOLATION_METHODS = {
@@ -23,8 +26,21 @@ if pil_image is not None:
         _PIL_INTERPOLATION_METHODS["lanczos"] = pil_image.LANCZOS
 
 
+def load_from_remote(image_url: str) -> Image | bool:
+    try:
+        r = requests.get(image_url, timeout=(20, 20))
+        if r.status_code // 100 != 2:
+            logging.error('Download image from %s failed, error msg: %s, request code: %s ',
+                          image_url, r.text, r.status_code)
+            return False
+        return pil_image.open(BytesIO(r.content))
+    except Exception as e:
+        logging.error('Download image from %s failed, error msg: %s', image_url, str(e))
+        return False
+
+
 def load_img(
-    path, grayscale=False, color_mode="rgb", target_size=None, interpolation="nearest"
+        path, grayscale=False, color_mode="rgb", target_size=None, interpolation="nearest"
 ):
     """Loads an image into PIL format.
     
@@ -51,7 +67,9 @@ def load_img(
             "Could not import PIL.Image. " "The use of `load_img` requires PIL."
         )
 
-    if isinstance(path, (str, io.IOBase)):
+    if path.startswith('http'):
+        img = load_from_remote(path)
+    elif isinstance(path, (str, io.IOBase)):
         img = pil_image.open(path)
     else:
         path = cv2.cvtColor(path, cv2.COLOR_BGR2RGB)
