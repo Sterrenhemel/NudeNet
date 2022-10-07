@@ -60,10 +60,9 @@ class Detector:
         if not os.path.exists(classes_path):
             print("Downloading the classes list ", classes_url, " to ", classes_path)
             # pydload.dload(classes_url, save_to_path=classes_path, max_time=None)
-            with get(classes_url, stream=True) as r:
+            with get(classes_url) as r:
                 with open(classes_path, 'wb') as model_file:
-                    for chunk in r.iter_content(chunk_size=8192):
-                        model_file.write(chunk)
+                    model_file.write(r.content)
 
         self.detection_model = onnxruntime.InferenceSession(checkpoint_path)
 
