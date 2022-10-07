@@ -26,7 +26,7 @@ if pil_image is not None:
         _PIL_INTERPOLATION_METHODS["lanczos"] = pil_image.LANCZOS
 
 
-def load_from_remote(image_url: str) -> Image | bool:
+def load_from_remote(image_url: str) -> any:
     try:
         r = requests.get(image_url, timeout=(20, 20))
         if r.status_code // 100 != 2:
