@@ -50,7 +50,7 @@ class Detector:
         classes_path = os.path.join(model_folder, "classes")
 
         if not os.path.exists(checkpoint_path):
-            print("Downloading the checkpoint to", checkpoint_path)
+            print("Downloading the checkpoint ", checkpoint_url, " to ", checkpoint_path)
             # pydload.dload(checkpoint_url, save_to_path=checkpoint_path, max_time=None)
             with get(checkpoint_url, stream=True) as r:
                 with open(checkpoint_path, 'wb') as model_file:
@@ -58,7 +58,7 @@ class Detector:
                         model_file.write(chunk)
 
         if not os.path.exists(classes_path):
-            print("Downloading the classes list to", classes_path)
+            print("Downloading the classes list ", classes_url, " to ", classes_path)
             # pydload.dload(classes_url, save_to_path=classes_path, max_time=None)
             with get(classes_url, stream=True) as r:
                 with open(classes_path, 'wb') as model_file:
