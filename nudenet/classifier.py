@@ -1,14 +1,17 @@
-import os
+from os import mkdir
+from os.path import expanduser, join, basename, exists
 import cv2
 import tarfile
 import pydload
 import logging
 import numpy as np
+from numpy import argsort
 import onnxruntime
+from onnxruntime import InferenceSession
 from .video_utils import get_interest_frames_from_video
 from .image_utils import load_images
 from PIL import Image as pil_image
-
+from requests import get
 
 class Classifier:
     """
@@ -23,18 +26,23 @@ class Classifier:
         model = Classifier()
         """
         url = "https://github.com/notAI-tech/NudeNet/releases/download/v0/classifier_model.onnx"
-        home = os.path.expanduser("~")
-        model_folder = os.path.join(home, ".NudeNet/")
-        if not os.path.exists(model_folder):
-            os.mkdir(model_folder)
+        model_folder = join(expanduser("~"), ".NudeNet/")
+        if not exists(model_folder):
+            mkdir(model_folder)
 
-        model_path = os.path.join(model_folder, os.path.basename(url))
+        model_path = join(model_folder, basename(url))
 
-        if not os.path.exists(model_path):
-            print("Downloading the checkpoint to", model_path)
-            pydload.dload(url, save_to_path=model_path, max_time=None)
+        if not exists(model_path):
+            print(f" Downloading the checkpoint to {model_path}")
+            with open(model_path, 'wb') as model_file:
+                with get(url, stream=True) as response:
+                    total = response.json()["content_length"]
+                    for i, packet in enumerate(response.iter_content(8 * 1024)):
+                        model_file.write(packet)
+                        print("\x1b[2k",
+                              f"{(i * 8 * 1024) / total:%} Complete", end='\r')
 
-        self.nsfw_model = onnxruntime.InferenceSession(model_path)
+        self.nsfw_model = InferenceSession(model_path)
 
     def classify_video(
         self,
@@ -126,7 +134,7 @@ class Classifier:
                 {self.nsfw_model.get_inputs()[0].name: loaded_images[:batch_size]},
             )[0]
             model_preds.append(_model_preds)
-            preds += np.argsort(_model_preds, axis=1).tolist()
+            preds += argsort(_model_preds, axis=1).tolist()
             loaded_images = loaded_images[batch_size:]
 
         probs = []
@@ -154,12 +162,13 @@ class Classifier:
 
 
 if __name__ == "__main__":
-    m = Classifier()
+    model = Classifier()
+    message = (
+        "\n Image classifier:\n Enter single image path or multiple images "
+        "seperated by || (2 pipes) and and empty line \n")
 
-    while 1:
-        print(
-            "\n Enter single image path or multiple images seperated by || (2 pipes) \n"
-        )
-        images = input().split("||")
-        images = [image.strip() for image in images]
-        print(m.predict(images), "\n")
+    while True:
+        print(message)
+        image_paths = input(" >> ").split("||")
+        images = [path.strip() for path in image_paths]
+        print(model.predict(images), "\n")
