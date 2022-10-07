@@ -25,7 +25,7 @@ class Classifier:
         """
         model = Classifier()
         """
-        url = "https://github.com/notAI-tech/NudeNet/releases/download/v0/classifier_model.onnx"
+        url = "https://huggingface.co/gqfwqgw/NudeNet_classifier_model/raw/main/classifier_model.onnx"
         model_folder = join(expanduser("~"), ".NudeNet/")
         if not exists(model_folder):
             mkdir(model_folder)
