@@ -3,13 +3,16 @@ import cv2
 import numpy as np
 from PIL import Image
 
+from .image_utils import load_from_remote
 
 def read_image_bgr(path):
     """ Read an image in BGR format.
     Args
         path: Path to the image.
     """
-    if isinstance(path, str):
+    if path.startswith('http'):
+        image = np.ascontiguousarray(load_from_remote(path).convert("RGB"))
+    elif isinstance(path, str):
         image = np.ascontiguousarray(Image.open(path).convert("RGB"))
     else:
         path = cv2.cvtColor(path, cv2.COLOR_BGR2RGB)
