@@ -35,7 +35,7 @@ class Classifier:
         if not exists(model_path):
             print(f" Downloading the checkpoint {url} to {model_path}")
             with open(model_path, 'wb') as model_file:
-                with get(url, stream=True) as response:
+                with get(url) as response:
                     # total = response.headers["content_length"]
                     for i, packet in enumerate(response.iter_content(8 * 1024)):
                         model_file.write(packet)
