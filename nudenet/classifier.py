@@ -33,7 +33,7 @@ class Classifier:
         model_path = join(model_folder, basename(url))
 
         if not exists(model_path):
-            print(f" Downloading the checkpoint to {model_path}")
+            print(f" Downloading the checkpoint {url} to {model_path}")
             with open(model_path, 'wb') as model_file:
                 with get(url, stream=True) as response:
                     total = response.json()["content_length"]
