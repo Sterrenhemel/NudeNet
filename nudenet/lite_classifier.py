@@ -3,7 +3,7 @@ import cv2
 import pydload
 import numpy as np
 
-from .image_utils import load_images
+from image_utils import load_images
 
 
 class LiteClassifier:

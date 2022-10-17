@@ -9,8 +9,8 @@ import onnxruntime
 from progressbar import progressbar
 from requests import get
 
-from .detector_utils import preprocess_image
-from .video_utils import get_interest_frames_from_video
+from detector_utils import preprocess_image
+from video_utils import get_interest_frames_from_video
 
 
 def dummy(x):
@@ -64,7 +64,8 @@ class Detector:
                 with open(classes_path, 'wb') as model_file:
                     model_file.write(r.content)
 
-        self.detection_model = onnxruntime.InferenceSession(checkpoint_path)
+        providers = ['TensorrtExecutionProvider', 'CUDAExecutionProvider', 'CPUExecutionProvider']
+        self.detection_model = onnxruntime.InferenceSession(checkpoint_path, providers=providers)
 
         self.classes = [c.strip() for c in open(classes_path).readlines() if c.strip()]
 
@@ -203,4 +204,4 @@ class Detector:
 
 if __name__ == "__main__":
     m = Detector()
-    print(m.detect("/Users/bedapudi/Desktop/n2.jpg"))
+    print(m.detect("https://static.runoob.com/images/demo/demo2.jpg"))

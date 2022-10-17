@@ -8,8 +8,8 @@ import numpy as np
 from numpy import argsort
 import onnxruntime
 from onnxruntime import InferenceSession
-from .video_utils import get_interest_frames_from_video
-from .image_utils import load_images
+from video_utils import get_interest_frames_from_video
+from image_utils import load_images
 from PIL import Image as pil_image
 from requests import get
 
@@ -44,7 +44,8 @@ class Classifier:
                         model_file.write(chunk)
                     # print("\x1b[2k", f"{(i * 8 * 1024) / total:%} Complete", end='\r')
 
-        self.nsfw_model = InferenceSession(model_path)
+        providers = ['TensorrtExecutionProvider', 'CUDAExecutionProvider', 'CPUExecutionProvider']
+        self.nsfw_model = InferenceSession(model_path, providers=providers)
 
     def classify_video(
         self,
@@ -173,4 +174,4 @@ if __name__ == "__main__":
         print(message)
         image_paths = input(" >> ").split("||")
         images = [path.strip() for path in image_paths]
-        print(model.predict(images), "\n")
+        print(model.classify(images), "\n")
