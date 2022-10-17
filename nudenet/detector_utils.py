@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
-from image_utils import load_from_remote
+from nudenet.image_utils import load_from_remote
 
 def read_image_bgr(path):
     """ Read an image in BGR format.
