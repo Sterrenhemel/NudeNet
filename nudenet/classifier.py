@@ -153,15 +153,16 @@ class Classifier:
 
             probs.append(single_probs)
 
-        images_preds = {}
+        images_preds = []
 
         for i, loaded_image_path in enumerate(loaded_image_paths):
             if not isinstance(loaded_image_path, str):
                 loaded_image_path = i
 
-            images_preds[loaded_image_path] = {}
+            images_p = {}
             for _ in range(len(preds[i])):
-                images_preds[loaded_image_path][preds[i][_]] = float(probs[i][_])
+                images_p[preds[i][_]] = float(probs[i][_])
+            images_preds.append(images_p)
 
         return images_preds
 
