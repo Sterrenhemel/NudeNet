@@ -8,8 +8,10 @@ import numpy as np
 from numpy import argsort
 import onnxruntime
 from onnxruntime import InferenceSession
-from video_utils import get_interest_frames_from_video
-from image_utils import load_images
+
+from nudenet.video_utils import get_interest_frames_from_video
+from nudenet.image_utils import load_images
+
 from PIL import Image as pil_image
 from requests import get
 

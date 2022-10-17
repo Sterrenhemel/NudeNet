@@ -9,8 +9,8 @@ import onnxruntime
 from progressbar import progressbar
 from requests import get
 
-from detector_utils import preprocess_image
-from video_utils import get_interest_frames_from_video
+from nudenet.detector_utils import preprocess_image
+from nudenet.video_utils import get_interest_frames_from_video
 
 
 def dummy(x):
