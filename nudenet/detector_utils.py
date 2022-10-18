@@ -10,7 +10,7 @@ def read_image_bgr(path):
     Args
         path: Path to the image.
     """
-    if path.startswith('http'):
+    if isinstance(path, str) and path.startswith('http'):
         image = np.ascontiguousarray(load_from_remote(path).convert("RGB"))
     elif isinstance(path, str):
         image = np.ascontiguousarray(Image.open(path).convert("RGB"))

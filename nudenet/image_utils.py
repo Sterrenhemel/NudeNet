@@ -67,7 +67,7 @@ def load_img(
             "Could not import PIL.Image. " "The use of `load_img` requires PIL."
         )
 
-    if path.startswith('http'):
+    if isinstance(path, str) and path.startswith('http'):
         img = load_from_remote(path)
     elif isinstance(path, (str, io.IOBase)):
         img = pil_image.open(path)
