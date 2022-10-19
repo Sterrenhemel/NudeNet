@@ -12,7 +12,7 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'NudeNet'
+NAME = 'VNudeNet'
 DESCRIPTION = 'An ensemble of Neural Nets for Nudity Detection and Censoring'
 URL = 'https://github.com/bedapudi6788/NudeNet'
 EMAIL = 'praneethbedapudi@gmail.com'
