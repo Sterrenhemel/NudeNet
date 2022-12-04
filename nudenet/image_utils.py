@@ -12,18 +12,13 @@ from PIL.Image import Image
 
 if pil_image is not None:
     _PIL_INTERPOLATION_METHODS = {
-        "nearest": pil_image.NEAREST,
-        "bilinear": pil_image.BILINEAR,
-        "bicubic": pil_image.BICUBIC,
+        "nearest": pil_image.Resampling.NEAREST,
+        "bilinear": pil_image.Resampling.BILINEAR,
+        "bicubic": pil_image.Resampling.BICUBIC,
+        "hamming": pil_image.Resampling.HAMMING,
+        "box": pil_image.Resampling.BOX,
+        "lanczos": pil_image.Resampling.LANCZOS
     }
-    # These methods were only introduced in version 3.4.0 (2016).
-    if hasattr(pil_image, "HAMMING"):
-        _PIL_INTERPOLATION_METHODS["hamming"] = pil_image.HAMMING
-    if hasattr(pil_image, "BOX"):
-        _PIL_INTERPOLATION_METHODS["box"] = pil_image.BOX
-    # This method is new in version 1.1.3 (2013).
-    if hasattr(pil_image, "LANCZOS"):
-        _PIL_INTERPOLATION_METHODS["lanczos"] = pil_image.LANCZOS
 
 
 def load_from_remote(image_url: str) -> any:
